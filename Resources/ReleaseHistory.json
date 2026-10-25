@@ -1,0 +1,70 @@
+{
+  "releases": [
+    {
+      "version": "0.2.1",
+      "build": "3",
+      "date": "2026-10-25",
+      "title": "Main window opens on launch",
+      "summary": "Fixes \"launching the app again shows no window\": this is a menu bar resident app, so the process keeps running after the main window is closed, and relaunching previously only activated the instance without showing a window. The main window now always opens on launch; a repeated launch or \"Open Wallpaper Library\" from the menu bar brings it back to the front.",
+      "highlights": [
+        "The main window always opens at launch (no longer only when the library is empty)",
+        "Launching again while the app is running (Spotlight / Finder / open command) reopens the main window automatically",
+        "Fixed a matching issue where \"Open Wallpaper Library…\" in the menu bar could fail to summon the window (SwiftUI windows with hidden title bars are identified by title or scene id)",
+        "The app stays resident in the menu bar after the main window is closed — behavior unchanged"
+      ],
+      "notes": [
+        "The wallpaper engine keeps playing while the window is closed; the menu bar icon can pause, advance to the next wallpaper, or reopen the window at any time"
+      ]
+    },
+    {
+      "version": "0.2.0",
+      "build": "2",
+      "date": "2026-10-25",
+      "title": "UI redesign and video resource management",
+      "summary": "Rebuilt the overall UI and interactions: sidebar groups with live playback status, library filtering, search and hover actions, new built-in system wallpapers and online video import, plus a new storage page that manages video resource usage and deletion in one place.",
+      "highlights": [
+        "UI redesign: the sidebar is split into \"Library / Manage\" groups with live playback status at the bottom (playing / auto-pause reason / manually paused)",
+        "Library redesign: type filter (all / video / image / dynamic wallpaper), name search, card hover actions (set as wallpaper, add to playlist) and double-click to apply",
+        "Dynamic wallpapers are editable: open the editor again from the card's \"Edit Schedule\" hover action or context menu",
+        "Built-in system wallpapers: browse macOS's own dynamic wallpaper videos (e.g. Tahoe Day, Sonoma) in one click; adding by \"reference\" is recommended so no files are copied and no library space is used",
+        "Online video import: paste a direct mp4 / mov link and the downloaded copy joins the library under its original file name",
+        "Storage page: media totals, library copy usage and reference counts; per-item source (local import / built-in / online), size, duration and usage context",
+        "Delete management: per-item delete with confirmation (copies note reclaimable space, references state the source file is untouched); one-click cleanup of unused video copies; orphan thumbnail cleanup; open resource folder",
+        "Fixed leftover thumbnails after deleting media in 0.1.0 — thumbnails are now removed together with the item",
+        "New headless maintenance commands: --seed-system-wallpapers and --import-url <url> for scripted batch import",
+        "Missing-source detection: items whose source was moved or deleted externally are marked \"missing\" and playback falls back to the system wallpaper"
+      ],
+      "notes": [
+        "\"Reference\" items only record the system file path (e.g. /System/Library/Desktop Pictures); deleting the item never deletes the system file nor frees disk space",
+        "\"Copy\" items live in the library directory (~/Library/Application Support/cduyzhDynamicWallpapaer/Library); deleting them on the storage page permanently frees that space",
+        "Online import requires the target site to allow direct downloads; downloaded copies remain subject to the source site's own license (Pexels / Mixkit etc.) — respect their terms"
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "build": "1",
+      "date": "2026-10-24",
+      "title": "First release: video / image / time-based dynamic wallpapers",
+      "summary": "A native macOS dynamic wallpaper app. Drawing on desktop-level rendering techniques used by open-source dynamic wallpaper apps, it plays looping video, static images, or time-based dynamic wallpapers at the desktop level on every display.",
+      "highlights": [
+        "Desktop-level rendering: a borderless window sits at CGWindowLevelForKey(.desktopWindow), below desktop icons and above the system wallpaper, visible on all Spaces",
+        "Video wallpapers: seamless looping via AVQueuePlayer + AVPlayerLooper with 0.5–2× speed, volume and mute controls",
+        "Image wallpapers: static images fill each display",
+        "Dynamic wallpapers: switch between multiple media by local time of day, wrapping automatically past midnight",
+        "Smart pause: pauses when the frontmost app is fullscreen, on battery power, after idle minutes, or when the display sleeps or the screensaver starts",
+        "Playlists: sequential or shuffled auto-rotation with optional crossfade",
+        "Multi-display: independent enable/disable and wallpaper choice per screen",
+        "Hide desktop icons: one-click toggle of Finder's CreateDesktop setting, restorable at any time",
+        "Global hotkey: Carbon RegisterEventHotKey toggles play/pause without accessibility permission",
+        "Menu bar app: LSUIElement resident status item with the main window opened on demand",
+        "Launch at login: registered via SMAppService"
+      ],
+      "notes": [
+        "First use: open the main window, add a video or image, then click \"Set as Wallpaper\" on its card",
+        "Video wallpapers are muted by default; uncheck mute in settings and adjust the volume to enable sound",
+        "Hide desktop icons modifies com.apple.finder's CreateDesktop and restarts Finder; turning the toggle off restores the icons",
+        "Fullscreen pause detection reads the frontmost app's window bounds via CGWindowList — no screen-recording permission needed (window content is never read)"
+      ]
+    }
+  ]
+}
